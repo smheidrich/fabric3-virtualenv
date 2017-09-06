@@ -84,14 +84,15 @@ def make_virtualenv(path, dependencies=[], eggs=[], system_site_packages=True,
 
     """
     if not exists(path):
-        version = tuple(run('%s --version' % env.virtualenv).split('.'))
+        r = run('%s --version' % env.virtualenv)
+        version = tuple([int(x) for x in r.split('.')])
         if version >= (1, 7):
             args = '--system-site-packages' if system_site_packages else ''
         else:
             args = '--no-site-packages' if not system_site_packages else ''
 
         if python_binary:
-            args += '-p {}'.format(python_binary)
+            args += ' -p {}'.format(python_binary)
 
         run('{virtualenv} {args} {path}'.format(
             virtualenv=env.virtualenv,
